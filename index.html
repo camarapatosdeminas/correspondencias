@@ -639,6 +639,7 @@
   const totalValor = arr.reduce((s, r) => s + (r.valor || 0), 0).toFixed(2);
   const totalCartas = arr.reduce((s, r) => s + (r.qtd || 0), 0);
 
+  
   const janela = window.open('', '_blank');
   janela.document.write(`
     <!DOCTYPE html><html><head><meta charset="UTF-8">
