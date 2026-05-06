@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Correspondências</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fira+Mono:wght@400;500&display=swap');
+
+  :root {
+    --amarelo: #f5c800;
+    --amarelo-claro: #fff9d6;
+    --vermelho: #c0392b;
+    --verde: #27ae60;
+    --cinza-fundo: #f4f6f9;
+    --cinza-borda: #dce1ea;
+    --texto: #1e2430;
+    --texto-suave: #6b7280;
+    --branco: #ffffff;
+    --sombra: 0 2px 12px rgba(0,0,0,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--cinza-fundo);
+    color: var(--texto);
+    min-height: 100vh;
+  }
+
+  /* ── CABEÇALHO ── */
+  header {
+    background: var(--texto);
+    color: var(--branco);
+    padding: 18px 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  header .logo {
+    width: 44px; height: 44px;
+    background: var(--amarelo);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+  header h1 { font-size: 1.25rem; font-weight: 800; letter-spacing: 0.01em; }
+  header p  { font-size: 0.8rem; color: #aab4c4; margin-top: 1px; }
+
+  /* ── ABAS ── */
+  .abas {
+    display: flex;
+    gap: 0;
+    background: var(--texto);
+    padding: 0 28px;
+    border-bottom: 3px solid var(--amarelo);
+  }
+  .aba-btn {
+    padding: 10px 22px;
+    border: none;
+    background: transparent;
+    color: #aab4c4;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -3px;
+    transition: all 0.2s;
+  }
+  .aba-btn:hover { color: var(--branco); }
+  .aba-btn.ativa { color: var(--amarelo); border-bottom-color: var(--amarelo); }
+
+  /* ── CONTEÚDO ── */
+  .pagina { display: none; padding: 28px; }
+  .pagina.ativa { display: block; }
+
+  /* ── FORMULÁRIO ── */
+  .card {
+    background: var(--branco);
+    border-radius: 14px;
+    padding: 28px;
+    box-shadow: var(--sombra);
+    margin-bottom: 24px;
+  }
+  .card h2 {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--texto);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card h2 span.icone {
+    background: var(--amarelo-claro);
+    border-radius: 8px;
+    padding: 5px 8px;
+    font-size: 1rem;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .form-grupo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .form-grupo label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--texto-suave);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .form-grupo input,
+  .form-grupo select {
+    padding: 10px 13px;
+    border: 2px solid var(--cinza-borda);
+    border-radius: 9px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+    color: var(--texto);
+    background: var(--cinza-fundo);
+    transition: border-color 0.2s;
+    outline: none;
+  }
+  .form-grupo input:focus,
+  .form-grupo select:focus {
+    border-color: var(--amarelo);
+    background: var(--branco);
+  }
+
+  .form-acoes {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    padding: 11px 24px;
+    border: none;
+    border-radius: 9px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-primario {
+    background: var(--texto);
+    color: var(--amarelo);
+  }
+  .btn-primario:hover { background: #2d3748; transform: translateY(-1px); }
+  .btn-secundario {
+    background: var(--cinza-fundo);
+    color: var(--texto-suave);
+    border: 2px solid var(--cinza-borda);
+  }
+  .btn-secundario:hover { background: var(--cinza-borda); }
+  .btn-perigo {
+    background: #fff0ef;
+    color: var(--vermelho);
+    border: 2px solid #fad4d1;
+    padding: 7px 14px;
+    font-size: 0.82rem;
+  }
+  .btn-perigo:hover { background: #fad4d1; }
+  .btn-exportar {
+    background: var(--verde);
+    color: var(--branco);
+    margin-left: auto;
+  }
+  .btn-exportar:hover { background: #219a52; }
+
+  /* ── FILTROS ── */
+  .barra-filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .barra-filtros input,
+  .barra-filtros select {
+    padding: 9px 13px;
+    border: 2px solid var(--cinza-borda);
+    border-radius: 9px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.88rem;
+    background: var(--branco);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .barra-filtros input:focus,
+  .barra-filtros select:focus { border-color: var(--amarelo); }
+
+  /* ── TABELA ── */
+  .tabela-wrapper { overflow-x: auto; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+  thead th {
+    background: var(--texto);
+    color: var(--amarelo);
+    padding: 12px 14px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+  tbody tr {
+    border-bottom: 1px solid var(--cinza-borda);
+    transition: background 0.15s;
+  }
+  tbody tr:hover { background: var(--amarelo-claro); }
+  tbody td { padding: 11px 14px; }
+
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+  .badge-servidor { background: #e3f0ff; color: #1a5fa8; }
+  .badge-servico  { background: #e8f8ef; color: #177a42; }
+
+  .valor-cell {
+    font-family: 'Fira Mono', monospace;
+    font-weight: 500;
+    color: var(--vermelho);
+  }
+
+  /* ── RESUMO ── */
+  .resumo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .resumo-card {
+    background: var(--branco);
+    border-radius: 12px;
+    padding: 18px 20px;
+    box-shadow: var(--sombra);
+    border-left: 4px solid var(--amarelo);
+  }
+  .resumo-card .titulo { font-size: 0.75rem; font-weight: 700; color: var(--texto-suave); text-transform: uppercase; letter-spacing: 0.05em; }
+  .resumo-card .valor  { font-size: 1.6rem; font-weight: 800; color: var(--texto); margin-top: 4px; font-family: 'Fira Mono', monospace; }
+
+  /* ── MENSAGEM VAZIA ── */
+  .vazio {
+    text-align: center;
+    padding: 48px 20px;
+    color: var(--texto-suave);
+    font-size: 0.9rem;
+  }
+  .vazio .emoji { font-size: 2.5rem; display: block; margin-bottom: 10px; }
+
+  /* ── TOAST ── */
+  #toast {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    background: var(--texto);
+    color: var(--amarelo);
+    padding: 13px 22px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 999;
+  }
+  #toast.show { transform: translateY(0); opacity: 1; }
+
+  /* ── MESES ── */
+  .mes-titulo {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--texto-suave);
+    padding: 8px 14px;
+    background: var(--cinza-fundo);
+    border-bottom: 1px solid var(--cinza-borda);
+  }
+
+  @media (max-width: 600px) {
+    header { padding: 14px 16px; }
+    .pagina { padding: 16px; }
+    .card { padding: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">✉️</div>
+  <div>
+    <h1>Correspondências</h1>
+    <p>Câmara Municipal — Registro de envios postais</p>
+  </div>
+</header>
+
+<nav class="abas">
+  <button class="aba-btn ativa" onclick="irPara('novo')">➕ Novo Registro</button>
+  <button class="aba-btn" onclick="irPara('lista')">📋 Todos os Registros</button>
+  <button class="aba-btn" onclick="irPara('resumo')">📊 Resumo</button>
+</nav>
+
+<!-- ═══════════════════════════════════════════
+     PÁGINA: NOVO REGISTRO
+═══════════════════════════════════════════ -->
+<section class="pagina ativa" id="pag-novo">
+  <div class="card">
+    <h2><span class="icone">📬</span> Registrar Nova Correspondência</h2>
+
+    <div class="form-grid">
+      <div class="form-grupo">
+        <label>Data do Envio</label>
+        <input type="date" id="f-data">
+      </div>
+      <div class="form-grupo">
+        <label>Mês de Referência</label>
+        <select id="f-mes">
+          <option value="">— selecione —</option>
+          <option>Janeiro</option><option>Fevereiro</option><option>Março</option>
+          <option>Abril</option><option>Maio</option><option>Junho</option>
+          <option>Julho</option><option>Agosto</option><option>Setembro</option>
+          <option>Outubro</option><option>Novembro</option><option>Dezembro</option>
+        </select>
+      </div>
+      <div class="form-grupo">
+        <label>Tipo</label>
+        <select id="f-tipo">
+          <option value="">— selecione —</option>
+          <option>Carta Simples</option>
+          <option>Carta Registrada</option>
+          <option>Sedex</option>
+          <option>Outro</option>
+        </select>
+      </div>
+      <div class="form-grupo">
+        <label>Enviado por</label>
+          <input type="text" id="f-enviado" placeholder="Ex: Câmara Municipal">
+      </div>
+      <div class="form-grupo">
+        <label>Destino / Correios</label>
+        <input type="text" id="f-destino" placeholder="Ex: Correios">
+      </div>
+      <div class="form-grupo">
+        <label>Qtd de Cartas</label>
+        <input type="number" id="f-qtd" min="1" value="1">
+      </div>
+      <div class="form-grupo">
+        <label>Valor (R$)</label>
+        <input type="number" id="f-valor" step="0.01" min="0" placeholder="0,00">
+      </div>
+      <div class="form-grupo">
+        <label>Observação</label>
+        <input type="text" id="f-obs" placeholder="Opcional">
+      </div>
+    </div>
+
+    <div class="form-acoes">
+      <button class="btn btn-primario" onclick="salvar()">✔ Salvar Registro</button>
+      <button class="btn btn-secundario" onclick="limparForm()">↺ Limpar</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     PÁGINA: LISTA
+═══════════════════════════════════════════ -->
+<section class="pagina" id="pag-lista">
+  <div class="card">
+    <h2><span class="icone">🔍</span> Filtrar Registros</h2>
+    <div class="barra-filtros">
+      <input type="text" id="filtro-busca" placeholder="🔎 Buscar por destino ou observação…" oninput="renderTabela()" style="flex:1;min-width:200px">
+      <select id="filtro-mes" onchange="renderTabela()">
+        <option value="">Todos os meses</option>
+        <option>Janeiro</option><option>Fevereiro</option><option>Março</option>
+        <option>Abril</option><option>Maio</option><option>Junho</option>
+        <option>Julho</option><option>Agosto</option><option>Setembro</option>
+        <option>Outubro</option><option>Novembro</option><option>Dezembro</option>
+      </select>
+      <select id="filtro-enviado" onchange="renderTabela()">
+        <option value="">Todos</option>
+        <option>Servidor</option>
+        <option>Serviço</option>
+      </select>
+      <button class="btn btn-exportar" onclick="exportarPDF()">⬇ Exportar PDF</button>
+    </div>
+    <div class="tabela-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Data</th>
+            <th>Mês Ref.</th>
+            <th>Enviado por</th>
+            <th>Tipo</th>
+            <th>Destino</th>
+            <th>Qtd</th>
+            <th>Valor</th>
+            <th>Obs.</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="corpo-tabela"></tbody>
+      </table>
+      <div id="vazio-msg" class="vazio" style="display:none">
+        <span class="emoji">📭</span>
+        Nenhum registro encontrado.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     PÁGINA: RESUMO
+═══════════════════════════════════════════ -->
+<section class="pagina" id="pag-resumo">
+  <div class="resumo-grid" id="resumo-cards"></div>
+  <div class="card">
+    <h2><span class="icone">📅</span> Totais por Mês</h2>
+    <div class="tabela-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Mês</th>
+            <th>Qtd Registros</th>
+            <th>Total Cartas</th>
+            <th>Total Gasto</th>
+          </tr>
+        </thead>
+        <tbody id="resumo-tabela"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div id="toast">✔ Salvo com sucesso!</div>
+
+<script>
+  // ── DADOS ──────────────────────────────────
+  const CHAVE = 'correspondencias_2025';
+
+  function carregar() {
+    try { return JSON.parse(localStorage.getItem(CHAVE)) || []; }
+    catch { return []; }
+  }
+  function salvarDados(arr) {
+    localStorage.setItem(CHAVE, JSON.stringify(arr));
+  }
+
+  // ── NAVEGAÇÃO ──────────────────────────────
+  function irPara(id) {
+    document.querySelectorAll('.pagina').forEach(p => p.classList.remove('ativa'));
+    document.querySelectorAll('.aba-btn').forEach(b => b.classList.remove('ativa'));
+    document.getElementById('pag-' + id).classList.add('ativa');
+    const idx = { novo: 0, lista: 1, resumo: 2 }[id];
+    document.querySelectorAll('.aba-btn')[idx].classList.add('ativa');
+    if (id === 'lista')   renderTabela();
+    if (id === 'resumo')  renderResumo();
+  }
+
+  // ── SALVAR REGISTRO ────────────────────────
+  function salvar() {
+    const data    = document.getElementById('f-data').value;
+    const mes     = document.getElementById('f-mes').value;
+    const tipo    = document.getElementById('f-tipo').value;
+    const enviado = document.getElementById('f-enviado').value;
+    const destino = document.getElementById('f-destino').value.trim();
+    const qtd     = parseInt(document.getElementById('f-qtd').value) || 1;
+    const valor   = parseFloat(document.getElementById('f-valor').value) || 0;
+    const obs     = document.getElementById('f-obs').value.trim();
+
+    if (!mes || !tipo || !enviado || !destino) {
+      mostrarToast('⚠ Preencha Mês, Tipo, Enviado por e Destino!', true);
+      return;
+    }
+
+    const arr = carregar();
+    arr.push({ id: Date.now(), data, mes, tipo, enviado, destino, qtd, valor, obs });
+    salvarDados(arr);
+    limparForm();
+    mostrarToast('✔ Registro salvo com sucesso!');
+  }
+
+  function limparForm() {
+    ['f-data','f-mes','f-tipo','f-enviado','f-destino','f-obs'].forEach(id => {
+      const el = document.getElementById(id);
+      el.tagName === 'SELECT' ? el.selectedIndex = 0 : (el.value = '');
+    });
+    document.getElementById('f-qtd').value = 1;
+    document.getElementById('f-valor').value = '';
+    // data padrão: hoje
+    document.getElementById('f-data').value = new Date().toISOString().split('T')[0];
+  }
+
+  // ── TABELA ─────────────────────────────────
+  const MESES_ORDEM = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
+                        'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+  function renderTabela() {
+    const busca   = (document.getElementById('filtro-busca').value || '').toLowerCase();
+    const mes     = document.getElementById('filtro-mes').value;
+    const enviado = document.getElementById('filtro-enviado').value;
+
+    let arr = carregar().filter(r => {
+      if (mes     && r.mes     !== mes)     return false;
+      if (enviado && r.enviado !== enviado) return false;
+      if (busca   && !(r.destino + ' ' + r.obs).toLowerCase().includes(busca)) return false;
+      return true;
+    });
+
+    // Ordenar por mês + data
+    arr.sort((a, b) => {
+      const mi = MESES_ORDEM.indexOf(a.mes) - MESES_ORDEM.indexOf(b.mes);
+      if (mi !== 0) return mi;
+      return (a.data || '').localeCompare(b.data || '');
+    });
+
+    const tbody = document.getElementById('corpo-tabela');
+    tbody.innerHTML = '';
+
+    if (arr.length === 0) {
+      document.getElementById('vazio-msg').style.display = 'block';
+      return;
+    }
+    document.getElementById('vazio-msg').style.display = 'none';
+
+    let mesAtual = null;
+    arr.forEach((r, i) => {
+      if (r.mes !== mesAtual) {
+        mesAtual = r.mes;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td colspan="10" class="mes-titulo">📅 ${r.mes}</td>`;
+        tbody.appendChild(tr);
+      }
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td style="color:var(--texto-suave);font-size:0.8rem">${i + 1}</td>
+        <td>${r.data ? formatarData(r.data) : '—'}</td>
+        <td>${r.mes}</td>
+        <td><span class="badge ${r.enviado === 'Servidor' ? 'badge-servidor' : 'badge-servico'}">${r.enviado}</span></td>
+        <td>${r.tipo}</td>
+        <td>${r.destino}</td>
+        <td style="text-align:center">${r.qtd}</td>
+        <td class="valor-cell">${r.valor > 0 ? 'R$ ' + r.valor.toFixed(2) : '—'}</td>
+        <td style="color:var(--texto-suave);font-size:0.82rem">${r.obs || '—'}</td>
+        <td><button class="btn btn-perigo" onclick="excluir(${r.id})">🗑</button></td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function excluir(id) {
+    if (!confirm('Excluir este registro?')) return;
+    const arr = carregar().filter(r => r.id !== id);
+    salvarDados(arr);
+    renderTabela();
+    mostrarToast('🗑 Registro excluído.');
+  }
+
+  function formatarData(iso) {
+    const [y, m, d] = iso.split('-');
+    return `${d}/${m}/${y}`;
+  }
+
+  // ── RESUMO ─────────────────────────────────
+  function renderResumo() {
+    const arr = carregar();
+    const total = arr.reduce((s, r) => s + (r.valor || 0), 0);
+    const cartas = arr.reduce((s, r) => s + (r.qtd || 0), 0);
+
+    document.getElementById('resumo-cards').innerHTML = `
+      <div class="resumo-card"><div class="titulo">Total de Registros</div><div class="valor">${arr.length}</div></div>
+      <div class="resumo-card"><div class="titulo">Total de Cartas</div><div class="valor">${cartas}</div></div>
+      <div class="resumo-card"><div class="titulo">Total Gasto</div><div class="valor">R$&nbsp;${total.toFixed(2)}</div></div>
+    `;
+
+    // Por mês
+    const porMes = {};
+    arr.forEach(r => {
+      if (!porMes[r.mes]) porMes[r.mes] = { regs: 0, cartas: 0, valor: 0 };
+      porMes[r.mes].regs++;
+      porMes[r.mes].cartas += r.qtd || 0;
+      porMes[r.mes].valor  += r.valor || 0;
+    });
+
+    const tbody = document.getElementById('resumo-tabela');
+    tbody.innerHTML = '';
+    MESES_ORDEM.forEach(mes => {
+      if (!porMes[mes]) return;
+      const m = porMes[mes];
+      tbody.innerHTML += `
+        <tr>
+          <td><strong>${mes}</strong></td>
+          <td>${m.regs}</td>
+          <td>${m.cartas}</td>
+          <td class="valor-cell">R$ ${m.valor.toFixed(2)}</td>
+        </tr>`;
+    });
+    if (!tbody.innerHTML) tbody.innerHTML = '<tr><td colspan="4" class="vazio">Sem dados ainda.</td></tr>';
+  }
+
+  // ── EXPORTAR PDF ───────────────────────────
+  function exportarPDF() {
+  const arr = carregar();
+  if (arr.length === 0) { mostrarToast('⚠ Nenhum dado para exportar.', true); return; }
+
+  const linhas = arr.map((r, i) => `
+    <tr>
+      <td>${i + 1}</td>
+      <td>${r.data ? formatarData(r.data) : '—'}</td>
+      <td>${r.mes}</td>
+      <td>${r.enviado}</td>
+      <td>${r.tipo}</td>
+      <td>${r.destino}</td>
+      <td style="text-align:center">${r.qtd}</td>
+      <td>R$ ${(r.valor || 0).toFixed(2)}</td>
+      <td>${r.obs || '—'}</td>
+    </tr>`).join('');
+
+  const totalValor = arr.reduce((s, r) => s + (r.valor || 0), 0).toFixed(2);
+  const totalCartas = arr.reduce((s, r) => s + (r.qtd || 0), 0);
+
+  const janela = window.open('', '_blank');
+  janela.document.write(`
+    <!DOCTYPE html><html><head><meta charset="UTF-8">
+    <title>Correspondências 2026</title>
+    <style>
+      body { font-family: Arial, sans-serif; font-size: 12px; padding: 24px; color: #1e2430; }
+      h1 { font-size: 16px; margin-bottom: 4px; }
+      p.sub { color: #666; font-size: 11px; margin-bottom: 16px; }
+      table { width: 100%; border-collapse: collapse; }
+      th { background: #1e2430; color: #f5c800; padding: 8px; text-align: left; font-size: 11px; }
+      td { padding: 7px 8px; border-bottom: 1px solid #dce1ea; font-size: 11px; }
+      tr:nth-child(even) td { background: #f9f9f9; }
+      .rodape { margin-top: 16px; text-align: right; font-weight: bold; }
+      @media print { button { display: none; } }
+    </style>
+    </head><body>
+    <h1>✉ Correspondências 2025 — Câmara Municipal</h1>
+    <p class="sub">Emitido em: ${new Date().toLocaleDateString('pt-BR')}</p>
+    <button onclick="window.print()" style="margin-bottom:16px;padding:8px 18px;background:#1e2430;color:#f5c800;border:none;border-radius:7px;font-size:13px;font-weight:bold;cursor:pointer;">
+      🖨 Imprimir / Salvar como PDF
+    </button>
+    <table>
+      <thead><tr>
+        <th>#</th><th>Data</th><th>Mês</th><th>Enviado por</th>
+        <th>Tipo</th><th>Destino</th><th>Qtd</th><th>Valor</th><th>Obs.</th>
+      </tr></thead>
+      <tbody>${linhas}</tbody>
+    </table>
+    <div class="rodape">
+      Total de cartas: ${totalCartas} &nbsp;|&nbsp; Total gasto: R$ ${totalValor}
+    </div>
+    </body></html>`);
+  janela.document.close();
+}
+
+  // ── TOAST ──────────────────────────────────
+  let toastTimer;
+  function mostrarToast(msg, erro = false) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.background = erro ? 'var(--vermelho)' : 'var(--texto)';
+    t.style.color = erro ? '#fff' : 'var(--amarelo)';
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  // ── INIT ───────────────────────────────────
+  document.getElementById('f-data').value = new Date().toISOString().split('T')[0];
+</script>
+</body>
+</html>
